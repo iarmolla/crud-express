@@ -16,5 +16,4 @@ router.put('/users/:id',updateUser)
 router.patch('/users/:id',updateSalary)
 
 
-
 export default router
