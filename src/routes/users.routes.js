@@ -20,6 +20,4 @@ router.delete("/users/:id", deleteUser)
 
 router.put("/users", updateUser)
 
-router.patch("/users/:id", updateSalary)
-
 export default router
