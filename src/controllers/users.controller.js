@@ -24,7 +24,7 @@ export const insertUser = async (req, res) => {
         insert into users(name,lastname,salary,type,email,password)
         values (?,?,?,?,?,?)
     `,
-      [user.name, user.salary]
+      [user.name, user.lastname, user.salary, user.type, user.email, user.password]
     );
     res.send(query);
   } catch (error) {
