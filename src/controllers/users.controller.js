@@ -16,12 +16,13 @@ export const getUser = async (req, res) => {
 };
 
 export const insertUser = async (req, res) => {
+  console.log(req.body)
   try {
     const user = req.body;
     const [query] = await pool.query(
       `
-        insert into users(name,salary)
-        values (?,?)
+        insert into users(name,lastname,salary,type,email,password)
+        values (?,?,?,?,?,?)
     `,
       [user.name, user.salary]
     );
@@ -54,7 +55,7 @@ export const deleteUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   const { id,name, salary } = req.body;
-  await pool.query(`update users set name = ?, salary = ? where id = ?`, [
+  await pool.query(`update users set name = ?, lastname = ?,  salary = ? type = ? , email = ?, password = ? , where id = ?`, [
     name,
     salary,
     id,
