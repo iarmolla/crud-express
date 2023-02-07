@@ -16,7 +16,6 @@ export const getUser = async (req, res) => {
 };
 
 export const insertUser = async (req, res) => {
-  console.log(req.body)
   try {
     const user = req.body;
     const [query] = await pool.query(
@@ -54,12 +53,11 @@ export const deleteUser = async (req, res) => {
 }
 
 export const updateUser = async (req, res) => {
-  const { name, salary } = req.body;
-  const userId = parseInt(req.params.id);
+  const { id,name, salary } = req.body;
   await pool.query(`update users set name = ?, salary = ? where id = ?`, [
     name,
     salary,
-    userId,
+    id,
   ]);
   res.sendStatus(204);
 }

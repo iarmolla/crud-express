@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router } from "express"
 import {
   getUsers,
   getUser,
@@ -18,7 +18,7 @@ router.post("/users", insertUser)
 
 router.delete("/users/:id", deleteUser)
 
-router.put("/users/:id", updateUser)
+router.put("/users", updateUser)
 
 router.patch("/users/:id", updateSalary)
 
