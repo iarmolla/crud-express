@@ -1,4 +1,5 @@
 import pool from "../db.js";
+import bcrypt from "bcrypt";
 
 export const getUsers = async (req, res) => {
   const [query] = await pool.query("select * from users");
@@ -18,12 +19,13 @@ export const getUser = async (req, res) => {
 export const insertUser = async (req, res) => {
   try {
     const user = req.body;
+    const hash = await encryptPassword(user.password)
     const [query] = await pool.query(
       `
         insert into users(name,lastname,salary,type,email,password)
         values (?,?,?,?,?,?)
     `,
-      [user.name, user.lastname, user.salary, user.type, user.email, user.password]
+      [user.name, user.lastname, user.salary, user.type, user.email, hash]
     );
     res.send(query);
   } catch (error) {
@@ -61,3 +63,8 @@ export const updateUser = async (req, res) => {
   ]);
   res.sendStatus(204);
 }
+
+const encryptPassword = async (password) => {
+  const salt = await bcrypt.genSalt(10);
+  return await bcrypt.hash(password, salt);
+};
