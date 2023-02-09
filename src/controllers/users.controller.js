@@ -16,7 +16,6 @@ export const getUser = async (req, res) => {
 };
 
 export const insertUser = async (req, res) => {
-  console.log(req.body)
   try {
     const user = req.body;
     const [query] = await pool.query(
