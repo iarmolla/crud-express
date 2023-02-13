@@ -70,18 +70,17 @@ export const deleteUser = async (req, res) => {
 }
 
 export const updateUser = async (req, res) => {
-  const { id, name, salary, lastname, email, password, type } = req.body;
-  const hash = encryptPassword(password)
+  const hash = await encryptPassword(req.body.password)
   const user = {
-    name: name,
-    lastname: lastname,
-    salary: salary,
-    type: type,
-    email: email,
+    name: req.body.name,
+    lastname: req.body.lastname,
+    salary: req.body.salary,
+    type: req.body.type,
+    email: req.body.email,
     password: hash
   }
   try {
-    await pool.query('UPDATE users SET ? WHERE id = ?', [user, id]);
+    await pool.query('UPDATE users SET ? WHERE id = ?', [user, req.body.id]);
     return res.sendStatus(204);
   } catch (error) {
     return res.status(400).json({ error: error.message })

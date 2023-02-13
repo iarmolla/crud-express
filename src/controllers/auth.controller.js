@@ -27,6 +27,7 @@ export const login = async (req, res) => {
 export const register = async (req, res) => {
   const user = req.body;
   const hash = await encryptPassword(user.password);
+
   const [rows] = await pool.query(
     "select * from users where email = ?",
     user.email
