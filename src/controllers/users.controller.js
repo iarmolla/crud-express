@@ -25,15 +25,18 @@ export const insertUser = async (req, res) => {
     if (rows.length === 0) {
       const user = req.body;
       const hash = await encryptPassword(user.password)
-      const [query] = await pool.query(
+      await pool.query(
         `
           insert into users(name,lastname,salary,type,email,password)
           values (?,?,?,?,?,?)
       `,
         [user.name, user.lastname, user.salary, user.type, user.email, hash]
       );
-      res.status(204)
+      res.status(204).send()
+      
     } else {
+      console.log('error')
+
       res.status(401).json({
         error: 'email exist',
       });
