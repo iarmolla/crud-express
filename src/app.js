@@ -7,7 +7,7 @@ import cors from 'cors'
 const app = express()
 
 app.use(cors({
-  origin:'http://localhost:3000',  
+  origin:'https://chimerical-mandazi-47f4f8.netlify.app/login',  
 }))
 
 app.use(express.json())
