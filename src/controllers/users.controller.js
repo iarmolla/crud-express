@@ -18,16 +18,26 @@ export const getUser = async (req, res) => {
 
 export const insertUser = async (req, res) => {
   try {
-    const user = req.body;
-    const hash = await encryptPassword(user.password)
-    const [query] = await pool.query(
-      `
-        insert into users(name,lastname,salary,type,email,password)
-        values (?,?,?,?,?,?)
-    `,
-      [user.name, user.lastname, user.salary, user.type, user.email, hash]
+    const [rows] = await pool.query(
+      "select * from users where email = ?",
+      req.body.email
     );
-    res.send(query);
+    if (rows.length === 0) {
+      const user = req.body;
+      const hash = await encryptPassword(user.password)
+      const [query] = await pool.query(
+        `
+          insert into users(name,lastname,salary,type,email,password)
+          values (?,?,?,?,?,?)
+      `,
+        [user.name, user.lastname, user.salary, user.type, user.email, hash]
+      );
+      res.status(204)
+    } else {
+      res.status(401).json({
+        error: 'email exist',
+      });
+    }
   } catch (error) {
     res.status(400).json({
       error: error.message,
@@ -50,18 +60,32 @@ export const updateSalary = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   const id = req.params.id;
-  await pool.query("delete from users where id = ?", [id]);
-  res.sendStatus(204);
+
+  try {
+    await pool.query("delete from users where id = ?", [id]);
+    res.sendStatus(204);
+  } catch (error) {
+    return res.json({ error: error.message })
+  }
 }
 
 export const updateUser = async (req, res) => {
-  const { id,name, salary } = req.body;
-  await pool.query(`update users set name = ?, lastname = ?,  salary = ? type = ? , email = ?, password = ? , where id = ?`, [
-    name,
-    salary,
-    id,
-  ]);
-  res.sendStatus(204);
+  const { id, name, salary, lastname, email, password, type } = req.body;
+  const hash = encryptPassword(password)
+  const user = {
+    name: name,
+    lastname: lastname,
+    salary: salary,
+    type: type,
+    email: email,
+    password: hash
+  }
+  try {
+    await pool.query('UPDATE users SET ? WHERE id = ?', [user, id]);
+    return res.sendStatus(204);
+  } catch (error) {
+    return res.status(400).json({ error: error.message })
+  }
 }
 
 const encryptPassword = async (password) => {

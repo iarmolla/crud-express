@@ -4,20 +4,24 @@ import jwt from "jsonwebtoken";
 import { secret } from "../config.js";
 
 export const login = async (req, res) => {
-  const user = req.body;
-  const [rows] = await pool.query(
-    "select * from users where email = ?",
-    user.email
-  );
-  if (await comparePassword(user?.password, rows[0]?.password)) {
-    const token = jwt.sign({ id: user?.id }, secret, {
-      expiresIn: 86400,
-    });
-    return res.status(200).json({ token: token });
-  } else {
-    return res.status(401).json({ message: "invalid user or password" });
+  try {
+    const user = req.body;
+    const [rows] = await pool.query(
+      "select * from users where email = ?",
+      user.email
+    );
+    if (await comparePassword(user?.password, rows[0]?.password)) {
+      const token = jwt.sign({ id: rows[0]?.id }, secret, {
+        expiresIn: 86400,
+      });
+      const encoded = jwt.verify(token, secret)
+      return res.status(200).json({ token: token });
+    } else {
+      return res.status(401).json({ message: "invalid user or password" });
+    }
+  } catch(error) {
+    return res.status(401).json({ message: "Invalid user or password" });
   }
-  res.send("ok");
 };
 
 export const register = async (req, res) => {
