@@ -7,7 +7,7 @@ import cors from 'cors'
 const app = express()
 
 app.use(cors({
-  origin:'https://chimerical-mandazi-47f4f8.netlify.app/login',  
+  origin:'https://chimerical-mandazi-47f4f8.netlify.app',  
 }))
 
 app.use(express.json())
