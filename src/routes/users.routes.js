@@ -12,7 +12,7 @@ const router = Router()
 
 router.get("/users", getUsers)
 
-router.get("/users/:id", getUser)
+router.get("/users/:email", getUser)
 
 router.post("/users", verifyToken, insertUser)
 

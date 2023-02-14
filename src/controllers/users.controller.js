@@ -7,11 +7,12 @@ export const getUsers = async (req, res) => {
 };
 
 export const getUser = async (req, res) => {
+  
   try {
-    const userId = parseInt(req.params.id);
-    const [rows] = await pool.query("select * from users where id = ?", userId);
+    const email = [...req.params.email]
+    const [rows] = await pool.query("select * from users where email like '?%'", email[0]);
     res.send(rows);
-  } catch {
+  } catch {    
     res.status(404).json({ message: "Not found" });
   }
 };
