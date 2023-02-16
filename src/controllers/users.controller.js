@@ -36,8 +36,6 @@ export const insertUser = async (req, res) => {
       res.status(204).send()
 
     } else {
-      console.log('error')
-
       res.status(401).json({
         error: 'email exist',
       });
@@ -80,7 +78,6 @@ export const updateUser = async (req, res) => {
     email: req.body.email,
     password: hash
   }
-  console.log(req.body)
   try {
     await pool.query('UPDATE users SET ? WHERE id = ?', [user, req.body.id]);
     return res.sendStatus(204);
