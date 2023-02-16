@@ -7,12 +7,12 @@ export const getUsers = async (req, res) => {
 };
 
 export const getUser = async (req, res) => {
-  
   try {
-    const email = [...req.params.email]
-    const [rows] = await pool.query("select * from users where email like '?%'", email[0]);
+    const query = [...req.params.query]
+    query[0] = query[0] + '%'
+    const [rows] = await pool.query("select * from users where email like ? or name like ? or lastname like ?", [query[0], query[0], query[0]]);
     res.send(rows);
-  } catch {    
+  } catch {
     res.status(404).json({ message: "Not found" });
   }
 };
@@ -34,7 +34,7 @@ export const insertUser = async (req, res) => {
         [user.name, user.lastname, user.salary, user.type, user.email, hash]
       );
       res.status(204).send()
-      
+
     } else {
       console.log('error')
 
@@ -49,17 +49,14 @@ export const insertUser = async (req, res) => {
   }
 }
 
-export const updateSalary = async (req, res) => {
-  const { salary } = req.body;
-  await pool.query(
-    `
-    update users
-    set salary = ?
-    where id = ?
-    `,
-    [salary, req.params.id]
-  );
-  res.sendStatus(204);
+export const update = async (req, res) => {
+  try {
+    const user = req.body
+    await pool.query('UPDATE users SET ? WHERE id = ?', [user, req.body.id]);
+    return res.sendStatus(204);
+  } catch (error) {
+    return res.status(400).json({ error: error.message })
+  }
 }
 
 export const deleteUser = async (req, res) => {
@@ -83,6 +80,7 @@ export const updateUser = async (req, res) => {
     email: req.body.email,
     password: hash
   }
+  console.log(req.body)
   try {
     await pool.query('UPDATE users SET ? WHERE id = ?', [user, req.body.id]);
     return res.sendStatus(204);
