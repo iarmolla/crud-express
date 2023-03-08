@@ -16,10 +16,10 @@ router.get("/users/:query", getUser)
 
 router.post("/users", verifyToken, insertUser)
 
-router.delete("/users/:id",verifyToken, deleteUser)
+router.delete("/users/:id", verifyToken, deleteUser)
 
-router.put("/users",verifyToken, updateUser)
+router.put("/users", verifyToken, updateUser)
 
-router.patch("/users",verifyToken,update)
+router.patch("/users", verifyToken, update)
 
 export default router

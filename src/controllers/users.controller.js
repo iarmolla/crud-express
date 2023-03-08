@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 export const getUsers = async (req, res) => {
   const [query] = await pool.query("select * from users");
-  res.send(query);
+  res.status(200).send(query);
 };
 
 export const getUser = async (req, res) => {
