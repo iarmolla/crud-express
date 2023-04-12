@@ -8,18 +8,20 @@ import {
   update
 } from "../controllers/users.controller.js"
 import { verifyToken } from '../middlewares/index.js'
+import cors from 'cors'
+
 const router = Router()
 
-router.get("/users", getUsers)
+router.get("/users", cors(), getUsers)
 
-router.get("/users/:query", getUser)
+router.get("/users/:query",cors(), getUser)
 
-router.post("/users", verifyToken, insertUser)
+router.post("/users",cors(), verifyToken, insertUser)
 
-router.delete("/users/:id", verifyToken, deleteUser)
+router.delete("/users/:id",cors(), verifyToken, deleteUser)
 
-router.put("/users", verifyToken, updateUser)
+router.put("/users",cors(), verifyToken, updateUser)
 
-router.patch("/users", verifyToken, update)
+router.patch("/users",cors(), verifyToken, update)
 
 export default router

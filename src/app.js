@@ -11,9 +11,9 @@ app.use(express.json())
 
 app.use(express.urlencoded({ extended: true }))
 
-app.use(usersRoutes)
+app.use(usersRoutes,cors())
 
-app.use(auth)
+app.use(auth, cors())
 
 app.use((req, res, next) => {
   res.status(404).json({ message: "Not found" })
