@@ -2,8 +2,6 @@
 API REST - PANEL DE ADMIN
 
 ## Tecnologías 🖥️
-La api está hecha con:
-
 - [Nodejs](https://nodejs.org/es/)
 - [Express](https://expressjs.com/)
 - [Mysql](https://www.mysql.com/)
